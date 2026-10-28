@@ -3,76 +3,125 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#fff0f5">
-  <meta name="description" content="A heartfelt apology from the heart.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#fff1f5">
+  <meta name="description" content="A little message from my heart. I'm truly sorry.">
   <title>Maaf Kar Do 🥺💖</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="./style.css">
   <script src="./script.js" defer></script>
 </head>
+
 <body>
-  <div id="heartsBackground" class="hearts-background" aria-hidden="true"></div>
+  <div class="ambient-glow glow-one" aria-hidden="true"></div>
+  <div class="ambient-glow glow-two" aria-hidden="true"></div>
 
-  <main class="card" id="mainCard">
-    <div class="top-heart" aria-hidden="true">💗</div>
+  <div id="heartBackground" class="heart-background" aria-hidden="true"></div>
+  <div id="messageLayer" class="message-layer" aria-live="polite" aria-atomic="true"></div>
 
-    <h1>I'm Really Sorry 🥺</h1>
-    <p class="subtitle">Please ek baar meri baat sun lo...</p>
+  <main class="page-shell">
+    <section class="apology-card" id="apologyCard" aria-labelledby="mainTitle">
+      <div class="top-label">
+        <span class="label-heart" aria-hidden="true">♡</span>
+        A LITTLE MESSAGE FROM MY HEART
+      </div>
 
-    <div class="cute-image" id="cuteImage" aria-hidden="true">🥺</div>
+      <div class="main-heart" aria-hidden="true">
+        <span>♥</span>
+        <i class="spark spark-one"></i>
+        <i class="spark spark-two"></i>
+        <i class="spark spark-three"></i>
+      </div>
 
-    <p class="message">
-      Mujhse galti hui, aur main samajhta hoon ki meri wajah se
-      tumhe bura laga.
-      <br><br>
-      Main apni galti ko justify nahi karna chahta.
-      Tumhari feelings important hain, aur mujhe afsos hai
-      ki meri wajah se tumhe takleef hui.
-      <br><br>
-      I'm genuinely sorry. Main sirf apne words se nahi,
-      balki apne actions se bhi behtar banne ki koshish karunga. ❤️
-    </p>
+      <p class="eyebrow">For someone very special</p>
 
-    <p class="question">Kya tum mujhe maaf kar sakti ho? 🥹</p>
+      <h1 id="mainTitle">
+        I'm truly<br>
+        <span>sorry.</span>
+      </h1>
 
-    <div class="buttons">
-      <button type="button" id="yesBtn" class="yes-btn">
-        Haan, maaf kiya 💖
-      </button>
+      <div class="title-divider" aria-hidden="true">
+        <span></span>
+        <span class="divider-heart">♥</span>
+        <span></span>
+      </div>
 
-      <button type="button" id="noBtn" class="no-btn">
-        Abhi nahi 🥺
-      </button>
-    </div>
+      <div class="apology-copy">
+        <p>
+          I know that I may have hurt you, and I'm genuinely sorry for that.
+          The last thing I ever wanted was to become the reason behind your sadness.
+        </p>
 
-    <p class="attempt-text" id="attemptText" aria-live="polite">
-      Main dil se sorry hoon. ❤️
-    </p>
-  </main>
+        <p>
+          I can't change what happened, but I can accept my mistake,
+          learn from it, and try to do better. You matter to me,
+          and so do your feelings.
+        </p>
 
-  <div
-    id="popupLayer"
-    class="popup-layer"
-    aria-live="polite"
-    aria-atomic="false"
-  ></div>
+        <p class="highlight-line">
+          I'm not asking you to forget everything.
+          I'm just asking for a chance to make things right.
+        </p>
+      </div>
 
-  <section class="success-screen" id="successScreen" hidden>
-    <div class="success-card">
-      <div class="success-emoji" aria-hidden="true">🥹💖</div>
+      <div class="signature">
+        <span class="signature-line"></span>
+        <p>With a genuinely sorry heart <span aria-hidden="true">♡</span></p>
+      </div>
 
-      <h1>Thank You ❤️</h1>
+      <div class="button-area" id="buttonArea">
+        <button id="forgiveButton" class="button button-primary" type="button">
+          <span>Haan, maaf kiya</span>
+          <span class="button-icon" aria-hidden="true">💖</span>
+        </button>
 
-      <p>
-        Tumhare maaf karne ki mere liye bahut value hai.
-        Main jaanta hoon ki sirf sorry kehna kaafi nahi hota.
-        Main apni galti se seekhunga aur apne actions se
-        dikhane ki koshish karunga ki mujhe sach mein afsos hai.
+        <button id="notYetButton" class="button button-secondary" type="button">
+          <span>Abhi nahi</span>
+          <span class="button-icon" aria-hidden="true">🥺</span>
+        </button>
+      </div>
+
+      <p id="gentleNote" class="gentle-note" aria-live="polite">
+        No pressure. I just wanted you to know I'm sorry. ♡
       </p>
 
-      <div class="success-hearts" aria-hidden="true">💗 💕 💖</div>
-    </div>
-  </section>
+      <footer class="card-footer">
+        <span class="footer-heart" aria-hidden="true">♥</span>
+        Made with honesty, not expectations.
+      </footer>
+    </section>
+
+    <section id="thankYouScreen" class="thank-you-screen" hidden
+      aria-labelledby="thankYouTitle" tabindex="-1">
+      <div class="success-heart" aria-hidden="true">💗</div>
+
+      <p class="eyebrow">This means a lot to me</p>
+
+      <h2 id="thankYouTitle">
+        Thank you for<br>
+        <span>giving me a chance.</span>
+      </h2>
+
+      <div class="title-divider" aria-hidden="true">
+        <span></span>
+        <span class="divider-heart">♥</span>
+        <span></span>
+      </div>
+
+      <p class="success-message">
+        I'm truly grateful. I won't take your kindness for granted.
+        I'll try to show through my actions that your feelings matter to me.
+      </p>
+
+      <p class="success-signature">Thank you, from my heart. ♡</p>
+      <div class="success-decoration" aria-hidden="true">♡ &nbsp; ♥ &nbsp; ♡</div>
+    </section>
+
+    <p class="page-caption">A small page, with a sincere apology. ♡</p>
+  </main>
 </body>
 </html>
