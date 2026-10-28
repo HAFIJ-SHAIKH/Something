@@ -11,14 +11,23 @@
   box-sizing: border-box;
 }
 
+[hidden] {
+  display: none !important;
+}
+
+html {
+  min-height: 100%;
+  background: var(--light-pink);
+}
+
 body {
   margin: 0;
   min-height: 100vh;
   min-height: 100dvh;
+  padding: 28px 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px 16px;
   overflow-x: hidden;
   font-family: Arial, Helvetica, sans-serif;
   color: var(--text);
@@ -30,40 +39,48 @@ button {
   -webkit-tap-highlight-color: transparent;
 }
 
+button:focus-visible {
+  outline: 3px solid #b52d63;
+  outline-offset: 4px;
+}
+
 .card {
   position: relative;
   z-index: 2;
-  width: min(100%, 470px);
+  width: 100%;
+  max-width: 470px;
   padding: 30px 25px;
   text-align: center;
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid rgba(255, 79, 135, 0.15);
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(255, 79, 135, 0.18);
   border-radius: 28px;
-  box-shadow: 0 18px 60px rgba(196, 66, 112, 0.16);
-  animation: cardEnter 0.8s ease both;
+  box-shadow: 0 18px 60px rgba(196, 66, 112, 0.13);
+  animation: cardEnter 0.65s ease both;
 }
 
 .top-heart {
   font-size: 36px;
-  animation: heartbeat 1.5s infinite;
+  animation: heartbeat 2s ease-in-out infinite;
 }
 
 h1 {
   margin: 12px 0 8px;
   color: var(--dark-pink);
-  font-size: clamp(27px, 6vw, 36px);
+  font-size: clamp(27px, 7vw, 36px);
 }
 
 .subtitle {
   margin: 0;
   color: var(--muted);
   font-size: 15px;
+  line-height: 1.6;
 }
 
 .cute-image {
   margin: 22px auto;
   font-size: 76px;
-  animation: float 2.5s ease-in-out infinite;
+  line-height: 1.3;
+  animation: float 3s ease-in-out infinite;
 }
 
 .message {
@@ -78,6 +95,7 @@ h1 {
   margin: 22px 0;
   font-size: 17px;
   font-weight: bold;
+  line-height: 1.6;
 }
 
 .buttons {
@@ -92,48 +110,42 @@ h1 {
 .no-btn {
   min-height: 48px;
   padding: 13px 20px;
-  border: 0;
   border-radius: 15px;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
   touch-action: manipulation;
+  transition: background 0.2s, box-shadow 0.2s;
 }
 
 .yes-btn {
-  color: white;
+  color: #fff;
   background: linear-gradient(135deg, #ff5b92, #ec3474);
-  box-shadow: 0 7px 18px rgba(236, 52, 116, 0.25);
+  border: 1px solid transparent;
+  box-shadow: 0 6px 16px rgba(236, 52, 116, 0.2);
 }
 
 .yes-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 24px rgba(236, 52, 116, 0.3);
+  box-shadow: 0 8px 20px rgba(236, 52, 116, 0.28);
 }
 
 .no-btn {
   color: #7c5263;
   background: #fff0f5;
-  border: 1px solid #f7c9d9;
+  border: 1px solid #f3c4d5;
 }
 
 .no-btn:hover {
   background: #ffe3ed;
 }
 
-.yes-btn:active,
-.no-btn:active {
-  transform: scale(0.96);
-}
-
 .attempt-text {
-  min-height: 22px;
+  min-height: 24px;
   margin: 20px 0 0;
   color: var(--muted);
   font-size: 13px;
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
-/* Floating hearts in the background */
+/* Gentle floating hearts */
 .hearts-background {
   position: fixed;
   inset: 0;
@@ -144,13 +156,13 @@ h1 {
 
 .floating-heart {
   position: absolute;
-  bottom: -50px;
+  bottom: -45px;
   opacity: 0;
-  animation: rise linear forwards;
   user-select: none;
+  animation: rise linear forwards;
 }
 
-/* Popups never block the buttons */
+/* Apology popups never intercept taps */
 .popup-layer {
   position: fixed;
   inset: 0;
@@ -161,19 +173,22 @@ h1 {
 
 .apology-popup {
   position: absolute;
-  max-width: min(230px, 70vw);
-  padding: 12px 16px;
+  width: max-content;
+  max-width: min(250px, 76vw);
+  padding: 11px 15px;
   color: #8a2850;
   background: rgba(255, 255, 255, 0.97);
   border: 1px solid #ffc4d8;
-  border-radius: 17px;
-  box-shadow: 0 8px 25px rgba(180, 54, 103, 0.16);
-  font-size: 14px;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(180, 54, 103, 0.12);
+  font-size: 13px;
+  line-height: 1.5;
   text-align: center;
-  animation: popupIn 0.4s ease both, popupOut 0.5s ease 4.5s forwards;
+  overflow-wrap: anywhere;
+  animation: popupIn 0.35s ease both, popupOut 0.45s ease 3.7s forwards;
 }
 
-/* Success screen */
+/* Calm final message */
 .success-screen {
   position: fixed;
   inset: 0;
@@ -182,27 +197,25 @@ h1 {
   justify-content: center;
   align-items: center;
   padding: 20px;
-  background: rgba(255, 231, 240, 0.97);
-  animation: fadeIn 0.4s ease;
-}
-
-.success-screen.hidden {
-  display: none;
+  overflow-y: auto;
+  background: rgba(255, 240, 245, 0.98);
+  animation: fadeIn 0.5s ease;
 }
 
 .success-card {
-  width: min(100%, 430px);
+  width: 100%;
+  max-width: 430px;
   padding: 32px 24px;
   text-align: center;
-  background: white;
+  background: #fff;
+  border: 1px solid #f8d6e2;
   border-radius: 28px;
-  box-shadow: 0 20px 60px rgba(196, 66, 112, 0.18);
-  animation: cardEnter 0.6s ease both;
+  box-shadow: 0 20px 60px rgba(196, 66, 112, 0.13);
 }
 
 .success-emoji {
   font-size: 75px;
-  animation: heartbeat 1.3s infinite;
+  animation: heartbeat 2s ease-in-out infinite;
 }
 
 .success-card p {
@@ -212,42 +225,30 @@ h1 {
 }
 
 .success-hearts {
-  margin: 22px 0;
+  margin: 22px 0 0;
   font-size: 27px;
-}
-
-/* Confetti */
-.confetti {
-  position: fixed;
-  top: -20px;
-  z-index: 20;
-  width: 9px;
-  height: 14px;
-  pointer-events: none;
-  animation: confettiFall linear forwards;
 }
 
 @keyframes cardEnter {
   from {
     opacity: 0;
-    transform: translateY(22px) scale(0.96);
+    transform: translateY(16px);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
   }
 }
 
 @keyframes heartbeat {
   0%, 100% { transform: scale(1); }
-  15% { transform: scale(1.13); }
-  30% { transform: scale(1); }
-  45% { transform: scale(1.08); }
+  20% { transform: scale(1.08); }
+  40% { transform: scale(1); }
 }
 
 @keyframes float {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  50% { transform: translateY(-7px); }
 }
 
 @keyframes rise {
@@ -255,10 +256,10 @@ h1 {
     transform: translateY(0) rotate(0);
     opacity: 0;
   }
-  10% { opacity: 0.7; }
-  90% { opacity: 0.6; }
+  12% { opacity: 0.55; }
+  85% { opacity: 0.45; }
   100% {
-    transform: translateY(-110vh) rotate(35deg);
+    transform: translateY(-110vh) rotate(25deg);
     opacity: 0;
   }
 }
@@ -266,18 +267,18 @@ h1 {
 @keyframes popupIn {
   from {
     opacity: 0;
-    transform: translateY(12px) scale(0.8);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
   }
 }
 
 @keyframes popupOut {
   to {
     opacity: 0;
-    transform: translateY(-12px) scale(0.95);
+    transform: translateY(-8px);
   }
 }
 
@@ -286,14 +287,11 @@ h1 {
   to { opacity: 1; }
 }
 
-@keyframes confettiFall {
-  to {
-    transform: translateY(110vh) rotate(720deg);
-    opacity: 0;
-  }
-}
-
 @media (max-width: 400px) {
+  body {
+    padding: 20px 12px;
+  }
+
   .card {
     padding: 25px 18px;
   }
@@ -314,6 +312,6 @@ h1 {
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 }
