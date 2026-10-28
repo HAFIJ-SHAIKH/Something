@@ -2,160 +2,160 @@
 "use strict";
 
 document.addEventListener("DOMContentLoaded", () => {
-  const get = (id) => document.getElementById(id);
+  const apologyCard = document.getElementById("apologyCard");
+  const thankYouScreen = document.getElementById("thankYouScreen");
+  const forgiveButton = document.getElementById("forgiveButton");
+  const notYetButton = document.getElementById("notYetButton");
+  const gentleNote = document.getElementById("gentleNote");
+  const heartBackground = document.getElementById("heartBackground");
 
-  const noBtn = get("noBtn");
-  const yesBtn = get("yesBtn");
-  const attemptText = get("attemptText");
-  const popupLayer = get("popupLayer");
-  const heartsBackground = get("heartsBackground");
-  const mainCard = get("mainCard");
-  const successScreen = get("successScreen");
-
-  const requiredElements = [
-    noBtn,
-    yesBtn,
-    attemptText,
-    popupLayer,
-    heartsBackground,
-    mainCard,
-    successScreen
-  ];
-
-  if (requiredElements.some((element) => !element)) {
+  // Stop safely if the HTML elements are missing.
+  if (
+    !apologyCard ||
+    !thankYouScreen ||
+    !forgiveButton ||
+    !notYetButton ||
+    !gentleNote ||
+    !heartBackground
+  ) {
     console.error(
-      "Maaf Kar Do: A required HTML element is missing. Check index.html."
+      "Opener page setup error: check the HTML element IDs."
     );
     return;
   }
 
-  const apologyMessages = [
-    "Mujhe sach mein afsos hai. ❤️",
-    "Tumhari feelings mere liye important hain. 💗",
-    "Main apni galti ki zimmedari leta hoon. 🥺",
-    "Kaash main tumhari takleef door kar sakun. 💕",
-    "Main apni galti se seekhna chahta hoon. ❤️",
-    "Tumhari baat sunne ke liye main yahin hoon. 🫶",
-    "I'm genuinely sorry. 💖",
-    "Main chahta hoon ki tumhe meri baaton se nahi, actions se bharosa ho."
-  ];
+  let accepted = false;
+  let heartTimer = null;
 
-  const heartSymbols = ["💗", "💕", "💖", "♡", "💘"];
+  const reducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  );
 
-  let heartInterval = null;
-  let nextMessage = "";
+  // Create a decorative floating heart.
+  function createHeart() {
+    if (
+      reducedMotion.matches ||
+      document.hidden ||
+      accepted ||
+      !heartBackground.isConnected
+    ) {
+      return;
+    }
 
-  function chooseApologyMessage() {
-    const choices = apologyMessages.filter(
-      (message) => message !== nextMessage
-    );
-
-    const pool = choices.length ? choices : apologyMessages;
-    const message = pool[Math.floor(Math.random() * pool.length)];
-
-    nextMessage = message;
-    return message;
-  }
-
-  // Create soft background hearts.
-  function createFloatingHeart() {
     const heart = document.createElement("span");
     heart.className = "floating-heart";
     heart.setAttribute("aria-hidden", "true");
-    heart.textContent =
-      heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+    heart.textContent = Math.random() > 0.5 ? "♡" : "♥";
 
-    heart.style.left = `${Math.random() * 100}%`;
-    heart.style.fontSize = `${14 + Math.random() * 20}px`;
-    heart.style.animationDuration = `${8 + Math.random() * 5}s`;
+    const size = 11 + Math.random() * 16;
+    const duration = 9 + Math.random() * 7;
+    const left = Math.random() * 100;
+    const drift = Math.round(Math.random() * 90 - 45);
+    const opacity = (0.15 + Math.random() * 0.2).toFixed(2);
 
-    heartsBackground.appendChild(heart);
+    heart.style.left = `${left}%`;
+    heart.style.fontSize = `${size}px`;
+    heart.style.setProperty("--duration", `${duration}s`);
+    heart.style.setProperty("--drift", `${drift}px`);
+    heart.style.setProperty("--heart-opacity", opacity);
 
-    heart.addEventListener("animationend", () => heart.remove(), {
-      once: true
-    });
+    heartBackground.appendChild(heart);
 
-    window.setTimeout(() => heart.remove(), 15000);
+    window.setTimeout(() => {
+      heart.remove();
+    }, (duration + 1) * 1000);
   }
 
-  // Add a short-lived message without blocking the page.
-  function showApologyPopup() {
-    const popup = document.createElement("div");
-    popup.className = "apology-popup";
-    popup.textContent = chooseApologyMessage();
-    popup.setAttribute("role", "status");
+  function startHearts() {
+    if (reducedMotion.matches || heartTimer !== null || accepted) {
+      return;
+    }
 
-    // Alternate upper and lower placement without displaying a counter.
-    const useTop = Math.random() < 0.5;
-    popup.style.top = useTop ? "12px" : "auto";
-    popup.style.bottom = useTop ? "auto" : "12px";
-    popup.style.visibility = "hidden";
+    createHeart();
+    heartTimer = window.setInterval(createHeart, 950);
+  }
 
-    popupLayer.appendChild(popup);
+  function stopHearts() {
+    if (heartTimer !== null) {
+      window.clearInterval(heartTimer);
+      heartTimer = null;
+    }
 
-    const width = popup.getBoundingClientRect().width;
-    const sidePadding = 12;
-    const freeSpace = Math.max(
-      0,
-      window.innerWidth - width - sidePadding * 2
+    heartBackground.replaceChildren();
+  }
+
+  function updateGentleNote(message) {
+    gentleNote.classList.remove("note-updated");
+
+    // Restart the small visual transition without tracking user actions.
+    void gentleNote.offsetWidth;
+
+    gentleNote.textContent = message;
+    gentleNote.classList.add("note-updated");
+  }
+
+  // A gentle response that does not demand or count anything.
+  notYetButton.addEventListener("click", () => {
+    if (accepted) return;
+
+    updateGentleNote(
+      "I understand. Take the time you need. I'm truly sorry. ♡"
     );
+  });
 
-    popup.style.left =
-      `${sidePadding + Math.random() * freeSpace}px`;
-    popup.style.visibility = "visible";
+  // Show a calm thank-you screen when forgiveness is offered.
+  forgiveButton.addEventListener("click", () => {
+    if (accepted) return;
 
-    const removalTimer = window.setTimeout(() => {
-      popup.remove();
-    }, 4300);
+    accepted = true;
+    stopHearts();
 
-    popup.addEventListener("animationend", (event) => {
-      if (event.animationName === "popupOut") {
-        window.clearTimeout(removalTimer);
-        popup.remove();
+    apologyCard.hidden = true;
+    thankYouScreen.hidden = false;
+
+    // Move keyboard and screen-reader focus to the new content.
+    thankYouScreen.focus({ preventScroll: true });
+
+    // Respect the user's reduced-motion preference.
+    if (!reducedMotion.matches) {
+      thankYouScreen.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    }
+  });
+
+  // Pause decorative effects while the page is in the background.
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      if (heartTimer !== null) {
+        window.clearInterval(heartTimer);
+        heartTimer = null;
       }
-    });
+    } else if (!accepted) {
+      startHearts();
+    }
+  });
 
-    // Keep the number of simultaneous popups limited.
-    while (popupLayer.children.length > 4) {
-      popupLayer.firstElementChild?.remove();
+  // Respond if the user changes their motion preference.
+  function handleMotionPreference() {
+    if (reducedMotion.matches) {
+      stopHearts();
+    } else if (!accepted) {
+      startHearts();
     }
   }
 
-  function handleNo() {
-    // No click counter, no changing button label, and no disabling.
-    showApologyPopup();
-
-    // The message is sincere and stable, not a score or challenge.
-    attemptText.textContent =
-      "Main samajhta hoon. Tum apna waqt le sakti ho. ❤️";
+  if (typeof reducedMotion.addEventListener === "function") {
+    reducedMotion.addEventListener("change", handleMotionPreference);
+  } else if (typeof reducedMotion.addListener === "function") {
+    // Compatibility for older browsers.
+    reducedMotion.addListener(handleMotionPreference);
   }
 
-  function handleYes() {
-    mainCard.hidden = true;
-    popupLayer.replaceChildren();
-    successScreen.hidden = false;
-
-    if (heartInterval !== null) {
-      window.clearInterval(heartInterval);
-      heartInterval = null;
-    }
-  }
-
-  noBtn.addEventListener("click", handleNo);
-  yesBtn.addEventListener("click", handleYes);
+  // Clean up decorative activity when leaving the page.
+  window.addEventListener("pagehide", stopHearts, { once: true });
 
   // Start the background animation.
-  for (let i = 0; i < 5; i++) {
-    window.setTimeout(createFloatingHeart, i * 250);
-  }
-
-  heartInterval = window.setInterval(createFloatingHeart, 1000);
-
-  // Avoid keeping a running interval when the page is left.
-  window.addEventListener("pagehide", () => {
-    if (heartInterval !== null) {
-      window.clearInterval(heartInterval);
-      heartInterval = null;
-    }
-  }, { once: true });
+  startHearts();
 });
