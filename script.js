@@ -8,35 +8,73 @@ document.addEventListener("DOMContentLoaded", () => {
   const notYetButton = document.getElementById("notYetButton");
   const gentleNote = document.getElementById("gentleNote");
   const heartBackground = document.getElementById("heartBackground");
+  const messageLayer = document.getElementById("messageLayer");
 
-  // Stop safely if the HTML elements are missing.
   if (
     !apologyCard ||
     !thankYouScreen ||
     !forgiveButton ||
     !notYetButton ||
     !gentleNote ||
-    !heartBackground
+    !heartBackground ||
+    !messageLayer
   ) {
-    console.error(
-      "Opener page setup error: check the HTML element IDs."
-    );
+    console.error("Apology page: required HTML elements are missing.");
     return;
   }
-
-  let accepted = false;
-  let heartTimer = null;
 
   const reducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)"
   );
 
-  // Create a decorative floating heart.
+  let accepted = false;
+  let heartTimer = null;
+  let popupTimer = null;
+  let popupRemovalTimer = null;
+  let activePopup = null;
+  let lastMessageIndex = -1;
+
+  // These are gentle variations, not escalating messages.
+  const apologyMessages = [
+    {
+      icon: "♡",
+      title: "Ek baat dil se... 💗",
+      message:
+        "Mujhe apni galti ka ehsaas hai. Kaash maine tumhe hurt na kiya hota. I'm genuinely sorry."
+    },
+    {
+      icon: "💌",
+      title: "I really mean it.",
+      message:
+        "Yeh sirf sorry kehne ke liye nahi hai. Main samajhna aur apni galti se seekhna chahta hoon."
+    },
+    {
+      icon: "🌷",
+      title: "Tumhari feelings matter karti hain.",
+      message:
+        "Main tumhari feelings ko samajhne ki koshish karunga. Tumhe jo waqt chahiye, woh le sakti ho."
+    },
+    {
+      icon: "🤍",
+      title: "Koi jaldi nahi hai.",
+      message:
+        "Tumhe abhi kuch kehne ya decide karne ki zaroorat nahi. Bas chahta tha ki meri maafi tum tak pahunch jaaye."
+    },
+    {
+      icon: "🫶",
+      title: "Dil se sorry.",
+      message:
+        "Main jo hua use badal nahi sakta, lekin usse seekh kar aage behtar karne ki koshish zaroor kar sakta hoon."
+    }
+  ];
+
+  // ---------- Floating hearts ----------
+
   function createHeart() {
     if (
-      reducedMotion.matches ||
-      document.hidden ||
       accepted ||
+      document.hidden ||
+      reducedMotion.matches ||
       !heartBackground.isConnected
     ) {
       return;
@@ -47,32 +85,37 @@ document.addEventListener("DOMContentLoaded", () => {
     heart.setAttribute("aria-hidden", "true");
     heart.textContent = Math.random() > 0.5 ? "♡" : "♥";
 
-    const size = 11 + Math.random() * 16;
-    const duration = 9 + Math.random() * 7;
-    const left = Math.random() * 100;
-    const drift = Math.round(Math.random() * 90 - 45);
-    const opacity = (0.15 + Math.random() * 0.2).toFixed(2);
+    const duration = 9 + Math.random() * 6;
 
-    heart.style.left = `${left}%`;
-    heart.style.fontSize = `${size}px`;
+    heart.style.left = `${Math.random() * 100}%`;
+    heart.style.fontSize = `${11 + Math.random() * 15}px`;
     heart.style.setProperty("--duration", `${duration}s`);
-    heart.style.setProperty("--drift", `${drift}px`);
-    heart.style.setProperty("--heart-opacity", opacity);
+    heart.style.setProperty(
+      "--drift",
+      `${Math.round(Math.random() * 80 - 40)}px`
+    );
+    heart.style.setProperty(
+      "--heart-opacity",
+      `${0.15 + Math.random() * 0.2}`
+    );
 
     heartBackground.appendChild(heart);
 
-    window.setTimeout(() => {
-      heart.remove();
-    }, (duration + 1) * 1000);
+    window.setTimeout(() => heart.remove(), (duration + 1) * 1000);
   }
 
   function startHearts() {
-    if (reducedMotion.matches || heartTimer !== null || accepted) {
+    if (
+      heartTimer !== null ||
+      accepted ||
+      reducedMotion.matches ||
+      document.hidden
+    ) {
       return;
     }
 
     createHeart();
-    heartTimer = window.setInterval(createHeart, 950);
+    heartTimer = window.setInterval(createHeart, 1000);
   }
 
   function stopHearts() {
@@ -84,60 +127,170 @@ document.addEventListener("DOMContentLoaded", () => {
     heartBackground.replaceChildren();
   }
 
+  // ---------- Gentle note below the buttons ----------
+
   function updateGentleNote(message) {
     gentleNote.classList.remove("note-updated");
 
-    // Restart the small visual transition without tracking user actions.
+    // Restart the visual transition; no click count is maintained.
     void gentleNote.offsetWidth;
 
     gentleNote.textContent = message;
     gentleNote.classList.add("note-updated");
   }
 
-  // A gentle response that does not demand or count anything.
+  // ---------- Popup helpers ----------
+
+  function clearPopupTimers() {
+    if (popupTimer !== null) {
+      window.clearTimeout(popupTimer);
+      popupTimer = null;
+    }
+
+    if (popupRemovalTimer !== null) {
+      window.clearTimeout(popupRemovalTimer);
+      popupRemovalTimer = null;
+    }
+  }
+
+  function removePopupImmediately() {
+    clearPopupTimers();
+
+    if (activePopup) {
+      activePopup.remove();
+      activePopup = null;
+    }
+
+    messageLayer.replaceChildren();
+  }
+
+  function dismissPopup() {
+    if (popupTimer !== null) {
+      window.clearTimeout(popupTimer);
+      popupTimer = null;
+    }
+
+    if (!activePopup) return;
+
+    const popup = activePopup;
+    activePopup = null;
+
+    if (reducedMotion.matches) {
+      popup.remove();
+      return;
+    }
+
+    popup.classList.add("is-leaving");
+
+    popupRemovalTimer = window.setTimeout(() => {
+      popup.remove();
+      popupRemovalTimer = null;
+    }, 320);
+  }
+
+  function getApologyMessage() {
+    if (apologyMessages.length === 1) {
+      return apologyMessages[0];
+    }
+
+    let nextIndex = Math.floor(
+      Math.random() * apologyMessages.length
+    );
+
+    // Avoid immediately repeating the same message.
+    if (nextIndex === lastMessageIndex) {
+      nextIndex = (nextIndex + 1) % apologyMessages.length;
+    }
+
+    lastMessageIndex = nextIndex;
+    return apologyMessages[nextIndex];
+  }
+
+  function showApologyPopup() {
+    if (accepted || document.hidden) return;
+
+    // Replace any existing popup instead of stacking notifications.
+    removePopupImmediately();
+
+    const selectedMessage = getApologyMessage();
+
+    const popup = document.createElement("div");
+    popup.className = "apology-toast";
+    popup.setAttribute("role", "status");
+
+    const icon = document.createElement("div");
+    icon.className = "toast-icon";
+    icon.setAttribute("aria-hidden", "true");
+    icon.textContent = selectedMessage.icon;
+
+    const content = document.createElement("div");
+    content.className = "toast-content";
+
+    const title = document.createElement("p");
+    title.className = "toast-title";
+    title.textContent = selectedMessage.title;
+
+    const message = document.createElement("p");
+    message.className = "toast-message";
+    message.textContent = selectedMessage.message;
+
+    content.append(title, message);
+    popup.append(icon, content);
+    messageLayer.appendChild(popup);
+
+    activePopup = popup;
+
+    // Give enough time to read, then dismiss gently.
+    popupTimer = window.setTimeout(() => {
+      popupTimer = null;
+      dismissPopup();
+    }, 5500);
+  }
+
+  // ---------- Button actions ----------
+
   notYetButton.addEventListener("click", () => {
     if (accepted) return;
 
     updateGentleNote(
-      "I understand. Take the time you need. I'm truly sorry. ♡"
+      "Koi baat nahi. Apna waqt lo, main tumhari feelings ki respect karta hoon. ♡"
     );
+
+    showApologyPopup();
   });
 
-  // Show a calm thank-you screen when forgiveness is offered.
   forgiveButton.addEventListener("click", () => {
     if (accepted) return;
 
     accepted = true;
+
     stopHearts();
+    removePopupImmediately();
 
     apologyCard.hidden = true;
     thankYouScreen.hidden = false;
 
-    // Move keyboard and screen-reader focus to the new content.
-    thankYouScreen.focus({ preventScroll: true });
-
-    // Respect the user's reduced-motion preference.
     if (!reducedMotion.matches) {
       thankYouScreen.scrollIntoView({
         behavior: "smooth",
         block: "center"
       });
     }
+
+    thankYouScreen.focus({ preventScroll: true });
   });
 
-  // Pause decorative effects while the page is in the background.
-  document.addEventListener("visibilitychange", () => {
+  // ---------- Visibility and accessibility ----------
+
+  function handleVisibilityChange() {
     if (document.hidden) {
-      if (heartTimer !== null) {
-        window.clearInterval(heartTimer);
-        heartTimer = null;
-      }
+      stopHearts();
+      removePopupImmediately();
     } else if (!accepted) {
       startHearts();
     }
-  });
+  }
 
-  // Respond if the user changes their motion preference.
   function handleMotionPreference() {
     if (reducedMotion.matches) {
       stopHearts();
@@ -146,16 +299,25 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  document.addEventListener(
+    "visibilitychange",
+    handleVisibilityChange
+  );
+
   if (typeof reducedMotion.addEventListener === "function") {
-    reducedMotion.addEventListener("change", handleMotionPreference);
+    reducedMotion.addEventListener(
+      "change",
+      handleMotionPreference
+    );
   } else if (typeof reducedMotion.addListener === "function") {
-    // Compatibility for older browsers.
     reducedMotion.addListener(handleMotionPreference);
   }
 
-  // Clean up decorative activity when leaving the page.
-  window.addEventListener("pagehide", stopHearts, { once: true });
+  window.addEventListener("pagehide", () => {
+    stopHearts();
+    removePopupImmediately();
+  });
 
-  // Start the background animation.
+  // Start the decorative background.
   startHearts();
 });
