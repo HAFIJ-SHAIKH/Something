@@ -3,59 +3,76 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#fff0f5">
+  <meta name="description" content="A heartfelt apology from the heart.">
   <title>Maaf Kar Do 🥺💖</title>
-  <link rel="stylesheet" href="style.css">
+
+  <link rel="stylesheet" href="./style.css">
+  <script src="./script.js" defer></script>
 </head>
 <body>
-  <div class="hearts-background" id="heartsBackground"></div>
+  <div id="heartsBackground" class="hearts-background" aria-hidden="true"></div>
 
   <main class="card" id="mainCard">
-    <div class="top-heart">💗</div>
+    <div class="top-heart" aria-hidden="true">💗</div>
 
     <h1>I'm Really Sorry 🥺</h1>
     <p class="subtitle">Please ek baar meri baat sun lo...</p>
 
-    <div class="cute-image" id="cuteImage">🥺</div>
+    <div class="cute-image" id="cuteImage" aria-hidden="true">🥺</div>
 
     <p class="message">
-      Mujhse galti hui, aur main samajhta hoon ki
-      meri wajah se tumhe bura laga.
+      Mujhse galti hui, aur main samajhta hoon ki meri wajah se
+      tumhe bura laga.
       <br><br>
-      Mera intention tumhe hurt karna nahi tha,
-      lekin main jaanta hoon ki meri galti se tumhe
-      takleef hui. I'm genuinely sorry. ❤️
+      Main apni galti ko justify nahi karna chahta.
+      Tumhari feelings important hain, aur mujhe afsos hai
+      ki meri wajah se tumhe takleef hui.
+      <br><br>
+      I'm genuinely sorry. Main sirf apne words se nahi,
+      balki apne actions se bhi behtar banne ki koshish karunga. ❤️
     </p>
 
     <p class="question">Kya tum mujhe maaf kar sakti ho? 🥹</p>
 
     <div class="buttons">
-      <button id="yesBtn" class="yes-btn">Haan, maaf kiya 💖</button>
-      <button id="noBtn" class="no-btn">Abhi nahi 🥺</button>
+      <button type="button" id="yesBtn" class="yes-btn">
+        Haan, maaf kiya 💖
+      </button>
+
+      <button type="button" id="noBtn" class="no-btn">
+        Abhi nahi 🥺
+      </button>
     </div>
 
-    <p class="attempt-text" id="attemptText">
+    <p class="attempt-text" id="attemptText" aria-live="polite">
       Main dil se sorry hoon. ❤️
     </p>
   </main>
 
-  <div class="popup-layer" id="popupLayer"></div>
+  <div
+    id="popupLayer"
+    class="popup-layer"
+    aria-live="polite"
+    aria-atomic="false"
+  ></div>
 
-  <section class="success-screen hidden" id="successScreen">
+  <section class="success-screen" id="successScreen" hidden>
     <div class="success-card">
-      <div class="success-emoji">🥹💖</div>
-      <h1>Thank You! ❤️</h1>
+      <div class="success-emoji" aria-hidden="true">🥹💖</div>
+
+      <h1>Thank You ❤️</h1>
+
       <p>
         Tumhare maaf karne ki mere liye bahut value hai.
+        Main jaanta hoon ki sirf sorry kehna kaafi nahi hota.
         Main apni galti se seekhunga aur apne actions se
         dikhane ki koshish karunga ki mujhe sach mein afsos hai.
       </p>
-      <div class="success-hearts">💗 💕 💖 💞</div>
-      <button id="replayBtn" class="yes-btn">Again 💝</button>
+
+      <div class="success-hearts" aria-hidden="true">💗 💕 💖</div>
     </div>
   </section>
-
-  <script src="script.js"></script>
 </body>
 </html>
