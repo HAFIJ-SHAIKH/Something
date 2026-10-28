@@ -1,174 +1,161 @@
-const noBtn = document.getElementById("noBtn");
-const yesBtn = document.getElementById("yesBtn");
-const replayBtn = document.getElementById("replayBtn");
 
-const attemptText = document.getElementById("attemptText");
-const cuteImage = document.getElementById("cuteImage");
-const popupLayer = document.getElementById("popupLayer");
-const heartsBackground = document.getElementById("heartsBackground");
+"use strict";
 
-const mainCard = document.getElementById("mainCard");
-const successScreen = document.getElementById("successScreen");
+document.addEventListener("DOMContentLoaded", () => {
+  const get = (id) => document.getElementById(id);
 
-let noCount = 0;
-let popupCount = 0;
+  const noBtn = get("noBtn");
+  const yesBtn = get("yesBtn");
+  const attemptText = get("attemptText");
+  const popupLayer = get("popupLayer");
+  const heartsBackground = get("heartsBackground");
+  const mainCard = get("mainCard");
+  const successScreen = get("successScreen");
 
-const apologyMessages = [
-  "Please meri baat sun lo 🥺",
-  "Mujhe sach mein afsos hai ❤️",
-  "Tumhari feelings mere liye important hain 💗",
-  "Kaash main apni galti sudhaar sakun 🥹",
-  "Main sirf sorry nahi, behtar bhi banna chahta hoon 💖",
-  "Tumhe hurt karna meri galti thi 😔",
-  "Main tumhari narazgi samajhne ki koshish karunga 💕",
-  "Jab tum ready ho, main sunne ke liye yahin hoon ❤️",
-  "Please mujhe apni galti sudharne ka mauka dena 🥺",
-  "I'm genuinely sorry. 💗"
-];
-
-const noButtonLabels = [
-  "Abhi nahi 🥺",
-  "Sochungi 🤔",
-  "Abhi bhi naraz hoon 😤",
-  "Itni jaldi nahi 💔",
-  "Pehle prove karo 🥹",
-  "Hmm... nahi 😶",
-  "Abhi nahi 💗"
-];
-
-const expressions = ["🥺", "😔", "🥹", "💗", "😿", "🫶", "💖"];
-
-// Create floating background hearts.
-function createFloatingHeart() {
-  const heart = document.createElement("span");
-  heart.className = "floating-heart";
-
-  const symbols = ["💗", "💕", "💖", "♡", "💘"];
-  heart.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-
-  heart.style.left = `${Math.random() * 100}%`;
-  heart.style.fontSize = `${14 + Math.random() * 22}px`;
-  heart.style.animationDuration = `${7 + Math.random() * 7}s`;
-
-  heartsBackground.appendChild(heart);
-
-  heart.addEventListener("animationend", () => heart.remove());
-}
-
-const heartInterval = window.setInterval(createFloatingHeart, 650);
-
-// Add an apology popup on every No click.
-// Popups are decorative and never intercept clicks.
-function createApologyPopup() {
-  const popup = document.createElement("div");
-  popup.className = "apology-popup";
-
-  popup.textContent =
-    apologyMessages[popupCount % apologyMessages.length];
-
-  const maxLeft = Math.max(0, window.innerWidth - 250);
-  const maxTop = Math.max(0, window.innerHeight - 100);
-
-  popup.style.left = `${Math.random() * maxLeft}px`;
-  popup.style.top = `${Math.random() * maxTop}px`;
-
-  popupLayer.appendChild(popup);
-  popupCount++;
-
-  // Remove old popups after their fade-out animation.
-  window.setTimeout(() => popup.remove(), 5200);
-
-  // Keep the DOM lightweight even after many clicks.
-  while (popupLayer.children.length > 12) {
-    popupLayer.firstElementChild.remove();
-  }
-}
-
-function handleNo() {
-  noCount++;
-
-  createApologyPopup();
-
-  noBtn.textContent =
-    noButtonLabels[(noCount) % noButtonLabels.length];
-
-  cuteImage.textContent =
-    expressions[noCount % expressions.length];
-
-  attemptText.textContent =
-    `You've clicked "Abhi nahi" ${noCount} time${noCount === 1 ? "" : "s"}. ` +
-    "Main samajhta hoon. Jab tum ready ho, tabhi. ❤️";
-
-  // Small visual feedback without moving or hiding the button.
-  noBtn.animate(
-    [
-      { transform: "scale(1)" },
-      { transform: "scale(1.06)" },
-      { transform: "scale(1)" }
-    ],
-    { duration: 250 }
-  );
-}
-
-function createConfetti() {
-  const colors = [
-    "#ff4f87",
-    "#ffc2d8",
-    "#f7a8c8",
-    "#ffd166",
-    "#cdb4db"
+  const requiredElements = [
+    noBtn,
+    yesBtn,
+    attemptText,
+    popupLayer,
+    heartsBackground,
+    mainCard,
+    successScreen
   ];
 
-  for (let i = 0; i < 90; i++) {
-    const piece = document.createElement("span");
-    piece.className = "confetti";
-
-    piece.style.left = `${Math.random() * 100}%`;
-    piece.style.backgroundColor =
-      colors[Math.floor(Math.random() * colors.length)];
-
-    piece.style.borderRadius = Math.random() > 0.5 ? "50%" : "2px";
-    piece.style.animationDuration = `${2 + Math.random() * 3}s`;
-    piece.style.animationDelay = `${Math.random() * 0.8}s`;
-
-    document.body.appendChild(piece);
-    piece.addEventListener("animationend", () => piece.remove());
+  if (requiredElements.some((element) => !element)) {
+    console.error(
+      "Maaf Kar Do: A required HTML element is missing. Check index.html."
+    );
+    return;
   }
-}
 
-function handleYes() {
-  mainCard.style.display = "none";
-  successScreen.classList.remove("hidden");
+  const apologyMessages = [
+    "Mujhe sach mein afsos hai. ❤️",
+    "Tumhari feelings mere liye important hain. 💗",
+    "Main apni galti ki zimmedari leta hoon. 🥺",
+    "Kaash main tumhari takleef door kar sakun. 💕",
+    "Main apni galti se seekhna chahta hoon. ❤️",
+    "Tumhari baat sunne ke liye main yahin hoon. 🫶",
+    "I'm genuinely sorry. 💖",
+    "Main chahta hoon ki tumhe meri baaton se nahi, actions se bharosa ho."
+  ];
 
-  createConfetti();
-}
+  const heartSymbols = ["💗", "💕", "💖", "♡", "💘"];
 
-function replay() {
-  noCount = 0;
-  popupCount = 0;
+  let heartInterval = null;
+  let nextMessage = "";
 
-  noBtn.textContent = "Abhi nahi 🥺";
-  cuteImage.textContent = "🥺";
-  attemptText.textContent = "Main dil se sorry hoon. ❤️";
+  function chooseApologyMessage() {
+    const choices = apologyMessages.filter(
+      (message) => message !== nextMessage
+    );
 
-  popupLayer.replaceChildren();
-  successScreen.classList.add("hidden");
-  mainCard.style.display = "";
+    const pool = choices.length ? choices : apologyMessages;
+    const message = pool[Math.floor(Math.random() * pool.length)];
 
-  document.querySelectorAll(".confetti").forEach((item) => item.remove());
-}
+    nextMessage = message;
+    return message;
+  }
 
-// Use explicit event listeners for reliable mobile and desktop clicks.
-noBtn.addEventListener("click", handleNo);
-yesBtn.addEventListener("click", handleYes);
-replayBtn.addEventListener("click", replay);
+  // Create soft background hearts.
+  function createFloatingHeart() {
+    const heart = document.createElement("span");
+    heart.className = "floating-heart";
+    heart.setAttribute("aria-hidden", "true");
+    heart.textContent =
+      heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
 
-// Create a few hearts immediately so the background isn't empty at startup.
-for (let i = 0; i < 8; i++) {
-  window.setTimeout(createFloatingHeart, i * 180);
-}
+    heart.style.left = `${Math.random() * 100}%`;
+    heart.style.fontSize = `${14 + Math.random() * 20}px`;
+    heart.style.animationDuration = `${8 + Math.random() * 5}s`;
 
-// Clean up the interval if the page is being unloaded.
-window.addEventListener("pagehide", () => {
-  window.clearInterval(heartInterval);
+    heartsBackground.appendChild(heart);
+
+    heart.addEventListener("animationend", () => heart.remove(), {
+      once: true
+    });
+
+    window.setTimeout(() => heart.remove(), 15000);
+  }
+
+  // Add a short-lived message without blocking the page.
+  function showApologyPopup() {
+    const popup = document.createElement("div");
+    popup.className = "apology-popup";
+    popup.textContent = chooseApologyMessage();
+    popup.setAttribute("role", "status");
+
+    // Alternate upper and lower placement without displaying a counter.
+    const useTop = Math.random() < 0.5;
+    popup.style.top = useTop ? "12px" : "auto";
+    popup.style.bottom = useTop ? "auto" : "12px";
+    popup.style.visibility = "hidden";
+
+    popupLayer.appendChild(popup);
+
+    const width = popup.getBoundingClientRect().width;
+    const sidePadding = 12;
+    const freeSpace = Math.max(
+      0,
+      window.innerWidth - width - sidePadding * 2
+    );
+
+    popup.style.left =
+      `${sidePadding + Math.random() * freeSpace}px`;
+    popup.style.visibility = "visible";
+
+    const removalTimer = window.setTimeout(() => {
+      popup.remove();
+    }, 4300);
+
+    popup.addEventListener("animationend", (event) => {
+      if (event.animationName === "popupOut") {
+        window.clearTimeout(removalTimer);
+        popup.remove();
+      }
+    });
+
+    // Keep the number of simultaneous popups limited.
+    while (popupLayer.children.length > 4) {
+      popupLayer.firstElementChild?.remove();
+    }
+  }
+
+  function handleNo() {
+    // No click counter, no changing button label, and no disabling.
+    showApologyPopup();
+
+    // The message is sincere and stable, not a score or challenge.
+    attemptText.textContent =
+      "Main samajhta hoon. Tum apna waqt le sakti ho. ❤️";
+  }
+
+  function handleYes() {
+    mainCard.hidden = true;
+    popupLayer.replaceChildren();
+    successScreen.hidden = false;
+
+    if (heartInterval !== null) {
+      window.clearInterval(heartInterval);
+      heartInterval = null;
+    }
+  }
+
+  noBtn.addEventListener("click", handleNo);
+  yesBtn.addEventListener("click", handleYes);
+
+  // Start the background animation.
+  for (let i = 0; i < 5; i++) {
+    window.setTimeout(createFloatingHeart, i * 250);
+  }
+
+  heartInterval = window.setInterval(createFloatingHeart, 1000);
+
+  // Avoid keeping a running interval when the page is left.
+  window.addEventListener("pagehide", () => {
+    if (heartInterval !== null) {
+      window.clearInterval(heartInterval);
+      heartInterval = null;
+    }
+  }, { once: true });
 });
