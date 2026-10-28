@@ -1,15 +1,15 @@
 
 :root {
   color-scheme: light;
-  --background: #fff6f9;
-  --pink: #e65c83;
-  --pink-dark: #cb416b;
-  --pink-soft: #ffe5ed;
-  --text: #49313b;
-  --muted: #987e89;
-  --border: rgba(217, 131, 158, 0.2);
-  --shadow: 0 24px 80px rgba(146, 76, 102, 0.12);
-  --radius: 28px;
+  --background: #faf5f6;
+  --surface: rgba(255, 255, 255, 0.9);
+  --accent: #c96c85;
+  --accent-dark: #a94e68;
+  --accent-soft: #f8e8ed;
+  --text: #40343a;
+  --muted: #8e7d84;
+  --border: #eee1e5;
+  --shadow: 0 22px 65px rgba(91, 55, 68, 0.09);
 }
 
 * {
@@ -29,7 +29,7 @@ body {
   margin: 0;
   overflow-x: hidden;
   background:
-    radial-gradient(ellipse at 50% 0%, #fff 0%, transparent 54%),
+    radial-gradient(ellipse at top, #fff 0%, transparent 58%),
     var(--background);
   color: var(--text);
   font-family: "DM Sans", sans-serif;
@@ -41,7 +41,7 @@ button {
 }
 
 button:focus-visible {
-  outline: 3px solid rgba(230, 92, 131, 0.65);
+  outline: 3px solid rgba(201, 108, 133, 0.55);
   outline-offset: 4px;
 }
 
@@ -49,29 +49,29 @@ button:focus-visible {
   display: none !important;
 }
 
-/* Background decoration */
+/* Background */
 
 .ambient-glow {
   position: fixed;
   z-index: 0;
-  width: 300px;
-  height: 300px;
+  width: 270px;
+  height: 270px;
   border-radius: 50%;
-  filter: blur(85px);
-  opacity: 0.36;
+  filter: blur(90px);
+  opacity: 0.25;
   pointer-events: none;
 }
 
 .glow-one {
-  top: -140px;
+  top: -130px;
   left: -100px;
-  background: #ffd3e1;
+  background: #f4d6df;
 }
 
 .glow-two {
-  right: -140px;
-  bottom: -120px;
-  background: #f0d8ff;
+  right: -120px;
+  bottom: -100px;
+  background: #e7dff0;
 }
 
 .heart-background {
@@ -84,15 +84,14 @@ button:focus-visible {
 
 .floating-heart {
   position: absolute;
-  bottom: -35px;
-  color: #e8a3b8;
+  bottom: -30px;
+  color: #cfa4b1;
   opacity: 0;
   user-select: none;
   animation: float-up var(--duration, 12s) linear forwards;
-  will-change: transform, opacity;
 }
 
-/* Main layout */
+/* Page layout */
 
 .page-shell {
   position: relative;
@@ -104,30 +103,28 @@ button:focus-visible {
   width: 100%;
   min-height: 100vh;
   min-height: 100dvh;
-  padding: 38px 18px 24px;
+  padding: 35px 16px 22px;
 }
 
 .apology-card,
 .thank-you-screen {
-  width: min(100%, 520px);
+  width: min(100%, 510px);
   padding: 34px 38px 25px;
   overflow: hidden;
   text-align: center;
-  background: rgba(255, 255, 255, 0.84);
-  border: 1px solid rgba(255, 255, 255, 0.96);
-  border-radius: var(--radius);
-  box-shadow:
-    var(--shadow),
-    inset 0 0 0 1px var(--border);
-  -webkit-backdrop-filter: blur(18px);
-  backdrop-filter: blur(18px);
-  animation: card-enter 650ms cubic-bezier(.2, .8, .2, 1) both;
+  background: var(--surface);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: 25px;
+  box-shadow: var(--shadow), inset 0 0 0 1px var(--border);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  animation: card-enter 600ms ease both;
 }
 
 .top-label {
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   gap: 8px;
   color: var(--muted);
   font-size: 10px;
@@ -136,57 +133,21 @@ button:focus-visible {
 }
 
 .top-label span {
-  color: var(--pink);
-  font-size: 19px;
-  line-height: 1;
+  color: var(--accent);
+  font-size: 17px;
 }
 
-/* Heart illustration */
-
-.main-heart {
-  position: relative;
+.main-symbol {
   display: grid;
   place-items: center;
-  width: 82px;
-  height: 82px;
-  margin: 26px auto 18px;
-  background: linear-gradient(145deg, #fff2f6, #ffe0e9);
-  border: 1px solid rgba(230, 92, 131, 0.15);
-  border-radius: 50%;
-  box-shadow: 0 10px 30px rgba(230, 92, 131, 0.1);
-}
-
-.main-heart > span {
-  color: var(--pink);
-  font-size: 38px;
-  animation: heart-beat 2.4s ease-in-out infinite;
-}
-
-.spark {
-  position: absolute;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #e98ca8;
-}
-
-.spark-one {
-  top: 10px;
-  right: 12px;
-}
-
-.spark-two {
-  bottom: 14px;
-  left: 8px;
-  width: 4px;
-  height: 4px;
-}
-
-.spark-three {
-  top: 25px;
-  left: 6px;
-  width: 3px;
-  height: 3px;
+  width: 76px;
+  height: 76px;
+  margin: 27px auto 18px;
+  border: 1px solid #f0dfe5;
+  border-radius: 23px;
+  background: linear-gradient(145deg, #fff, #f8edf0);
+  box-shadow: 0 8px 24px rgba(91, 55, 68, 0.06);
+  font-size: 34px;
 }
 
 .eyebrow {
@@ -194,52 +155,52 @@ button:focus-visible {
   color: var(--muted);
   font-size: 12px;
   font-weight: 500;
-  letter-spacing: 0.4px;
 }
 
 h1,
 h2 {
   margin: 12px 0 0;
   font-family: "Playfair Display", Georgia, serif;
-  font-size: clamp(45px, 10vw, 62px);
+  font-size: clamp(47px, 10vw, 61px);
   font-weight: 600;
-  letter-spacing: -2px;
-  line-height: 1.07;
+  letter-spacing: -1.7px;
+  line-height: 1.04;
 }
 
-h1 span,
-h2 span {
-  color: var(--pink);
+h1 span {
+  color: var(--accent);
   font-style: italic;
 }
 
 .title-divider {
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   gap: 12px;
   margin: 23px auto 21px;
 }
 
-.title-divider > span:not(.divider-heart) {
-  width: 45px;
+.title-divider > span:not(.divider-dot) {
+  width: 43px;
   height: 1px;
-  background: #efd0da;
+  background: #e8d7dd;
 }
 
-.divider-heart {
-  color: var(--pink);
-  font-size: 11px;
+.divider-dot {
+  width: 5px;
+  height: 5px;
+  background: var(--accent);
+  border-radius: 50%;
 }
 
-/* Apology text */
+/* Apology copy */
 
 .apology-copy {
   max-width: 390px;
   margin: 0 auto;
-  color: #725d66;
+  color: #6e6066;
   font-size: 13px;
-  line-height: 1.95;
+  line-height: 1.9;
 }
 
 .apology-copy p {
@@ -247,66 +208,61 @@ h2 span {
 }
 
 .apology-copy .highlight-line {
-  margin: 18px 0;
+  margin: 17px 0;
   padding: 13px 15px;
-  color: #79505e;
-  background: rgba(255, 231, 238, 0.65);
-  border: 1px solid rgba(230, 92, 131, 0.1);
-  border-radius: 15px;
+  color: #70515d;
+  background: #faf0f3;
+  border: 1px solid #f0e0e6;
+  border-radius: 13px;
   font-size: 12.5px;
 }
 
 .signature {
-  margin: 23px 0 20px;
+  margin: 22px 0 20px;
 }
 
 .signature-line {
   display: block;
-  width: 35px;
+  width: 32px;
   height: 2px;
-  margin: 0 auto 11px;
-  background: #edb4c5;
+  margin: 0 auto 10px;
+  background: #d9a9b8;
   border-radius: 3px;
 }
 
 .signature p {
   margin: 0;
-  color: #9c7b87;
+  color: #8c727c;
   font-family: "Playfair Display", Georgia, serif;
   font-size: 15px;
   font-style: italic;
-}
-
-.signature p span {
-  color: var(--pink);
 }
 
 /* Buttons */
 
 .button-area {
   display: grid;
-  gap: 11px;
+  gap: 10px;
   margin-top: 24px;
 }
 
 .button {
   display: flex;
-  align-items: center;
   justify-content: center;
-  gap: 10px;
+  align-items: center;
+  gap: 9px;
   width: 100%;
-  min-height: 51px;
-  padding: 13px 18px;
+  min-height: 50px;
+  padding: 13px 16px;
   border: 1px solid transparent;
-  border-radius: 15px;
+  border-radius: 13px;
   cursor: pointer;
   font-size: 13px;
   font-weight: 700;
   transition:
     transform 180ms ease,
     background 180ms ease,
-    box-shadow 180ms ease,
-    border-color 180ms ease;
+    box-shadow 180ms ease;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -315,36 +271,31 @@ h2 span {
 }
 
 .button-primary {
-  color: white;
-  background: linear-gradient(135deg, #ee7a9b, #df5079);
-  box-shadow: 0 8px 22px rgba(224, 80, 121, 0.23);
+  color: #fff;
+  background: linear-gradient(135deg, #cc7a91, #b85c77);
+  box-shadow: 0 7px 18px rgba(174, 81, 111, 0.16);
 }
 
 .button-primary:hover {
-  background: linear-gradient(135deg, #e96a8f, #d94470);
-  box-shadow: 0 11px 27px rgba(224, 80, 121, 0.29);
+  background: linear-gradient(135deg, #c46d86, #a94e68);
+  box-shadow: 0 9px 22px rgba(174, 81, 111, 0.21);
   transform: translateY(-1px);
 }
 
 .button-secondary {
-  color: #8e6e7a;
-  background: rgba(255, 255, 255, 0.8);
-  border-color: #f0dce3;
+  color: #79656e;
+  background: #fff;
+  border-color: #e9dce1;
 }
 
 .button-secondary:hover {
-  background: #fff0f4;
-  border-color: #e9bdcc;
-}
-
-.button-icon {
-  font-size: 15px;
+  background: #faf1f4;
 }
 
 .gentle-note {
   min-height: 20px;
-  margin: 16px 0 20px;
-  color: #a28a94;
+  margin: 16px 0 19px;
+  color: #96858c;
   font-size: 11px;
   line-height: 1.7;
 }
@@ -354,29 +305,21 @@ h2 span {
 }
 
 .card-footer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  padding-top: 17px;
-  border-top: 1px solid rgba(209, 130, 155, 0.15);
-  color: #b09aa3;
+  padding-top: 16px;
+  border-top: 1px solid #eee4e8;
+  color: #a29399;
   font-size: 10px;
-}
-
-.footer-heart {
-  color: #e98ca8;
 }
 
 .page-caption {
-  margin: 20px 0 0;
-  color: #b09aa3;
+  margin: 19px 0 0;
+  color: #a29399;
   font-size: 10px;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.2px;
   text-align: center;
 }
 
-/* Premium popup */
+/* Apology popups */
 
 .message-layer {
   position: fixed;
@@ -388,29 +331,26 @@ h2 span {
 
 .apology-toast {
   position: absolute;
-  top: max(20px, env(safe-area-inset-top));
+  top: max(18px, env(safe-area-inset-top));
   left: 50%;
   display: flex;
   align-items: center;
   gap: 13px;
-  width: min(430px, calc(100vw - 28px));
-  padding: 16px 17px;
+  width: min(420px, calc(100vw - 28px));
+  padding: 15px 16px;
   overflow: hidden;
-  color: #65414f;
-  background:
-    radial-gradient(circle at top right, rgba(255, 222, 235, 0.7), transparent 55%),
-    rgba(255, 252, 253, 0.96);
-  border: 1px solid rgba(232, 145, 170, 0.4);
-  border-radius: 21px;
+  color: var(--text);
+  background: rgba(255, 253, 254, 0.97);
+  border: 1px solid #ead8df;
+  border-radius: 17px;
   box-shadow:
-    0 18px 55px rgba(145, 69, 96, 0.17),
-    0 3px 12px rgba(145, 69, 96, 0.05),
+    0 16px 45px rgba(78, 48, 59, 0.13),
     inset 0 1px 0 rgba(255, 255, 255, 0.95);
-  -webkit-backdrop-filter: blur(22px);
-  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
   opacity: 0;
-  transform: translate(-50%, -18px) scale(0.97);
-  animation: toast-enter 420ms cubic-bezier(.2, .8, .2, 1) forwards;
+  transform: translate(-50%, -16px) scale(0.98);
+  animation: toast-enter 350ms ease forwards;
 }
 
 .apology-toast::before {
@@ -420,115 +360,95 @@ h2 span {
   left: 0;
   width: 100%;
   height: 3px;
-  background: linear-gradient(90deg, #f6c5d4, #e85d83, #f6c5d4);
+  background: linear-gradient(90deg, #e4bdca, #c96c85, #e4bdca);
   transform-origin: left;
-  animation: toast-progress 5.5s linear forwards;
+  animation: toast-progress 6s linear forwards;
 }
 
 .toast-icon {
-  position: relative;
   display: grid;
   place-items: center;
-  flex: 0 0 46px;
-  width: 46px;
-  height: 46px;
-  color: #e65c83;
-  background: linear-gradient(145deg, #fff0f5, #ffdfeb);
-  border: 1px solid rgba(232, 93, 131, 0.13);
-  border-radius: 16px;
-  font-size: 22px;
-}
-
-.toast-icon::after {
-  content: "✦";
-  position: absolute;
-  top: -5px;
-  right: -4px;
-  color: #e99bb4;
-  font-size: 12px;
+  flex: 0 0 43px;
+  width: 43px;
+  height: 43px;
+  color: #a95e75;
+  background: #f8eaf0;
+  border: 1px solid #f0dfe6;
+  border-radius: 13px;
+  font-size: 20px;
 }
 
 .toast-content {
   flex: 1;
   min-width: 0;
-  padding: 2px 0;
 }
 
 .toast-title {
-  margin: 0 0 5px;
-  color: #b64d70;
+  margin: 0 0 4px;
+  color: #a4546e;
   font-family: "Playfair Display", Georgia, serif;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
 }
 
 .toast-message {
   margin: 0;
-  color: #806773;
+  color: #75656c;
   font-size: 12px;
-  line-height: 1.75;
+  line-height: 1.7;
   overflow-wrap: anywhere;
 }
 
 .apology-toast.is-leaving {
-  animation: toast-exit 300ms ease forwards;
+  animation: toast-exit 260ms ease forwards;
 }
 
 /* Thank-you screen */
 
 .thank-you-screen {
-  padding-top: 45px;
-  padding-bottom: 40px;
+  padding-top: 43px;
+  padding-bottom: 38px;
 }
 
-.success-heart {
+.success-symbol {
   display: grid;
   place-items: center;
-  width: 94px;
-  height: 94px;
-  margin: 0 auto 24px;
-  border-radius: 50%;
-  background: linear-gradient(145deg, #fff0f5, #ffdeea);
-  box-shadow: 0 10px 35px rgba(232, 93, 131, 0.12);
-  font-size: 42px;
-  animation: success-enter 650ms cubic-bezier(.2, .8, .2, 1) both;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 23px;
+  background: #f8edf0;
+  border: 1px solid #efdee4;
+  border-radius: 22px;
+  font-size: 34px;
 }
 
 .thank-you-screen h2 {
-  font-size: clamp(36px, 8vw, 48px);
-  letter-spacing: -1.4px;
-  line-height: 1.2;
+  font-size: clamp(40px, 8vw, 51px);
+  letter-spacing: -1px;
 }
 
 .success-message {
-  max-width: 360px;
+  max-width: 355px;
   margin: 0 auto;
-  color: #725d66;
-  font-size: 13.5px;
-  line-height: 2;
+  color: #6e6066;
+  font-size: 13px;
+  line-height: 1.95;
 }
 
 .success-signature {
-  margin: 26px 0 0;
-  color: #9c7b87;
+  margin: 25px 0 0;
+  color: #8c727c;
   font-family: "Playfair Display", Georgia, serif;
-  font-size: 16px;
+  font-size: 15px;
   font-style: italic;
 }
 
-.success-decoration {
-  margin-top: 28px;
-  color: #e88eaa;
-  font-size: 15px;
-  letter-spacing: 6px;
-}
-
-/* Animations */
+/* Motion */
 
 @keyframes card-enter {
   from {
     opacity: 0;
-    transform: translateY(18px);
+    transform: translateY(15px);
   }
   to {
     opacity: 1;
@@ -536,35 +456,24 @@ h2 span {
   }
 }
 
-@keyframes heart-beat {
-  0%, 100% { transform: scale(1); }
-  14% { transform: scale(1.1); }
-  28% { transform: scale(1); }
-  42% { transform: scale(1.06); }
-  56% { transform: scale(1); }
-}
-
 @keyframes float-up {
   0% {
     opacity: 0;
-    transform: translate3d(0, 0, 0) rotate(0deg);
+    transform: translate3d(0, 0, 0);
   }
-  10% {
-    opacity: var(--heart-opacity, 0.3);
-  }
-  85% {
-    opacity: var(--heart-opacity, 0.3);
+  12%, 82% {
+    opacity: var(--heart-opacity, 0.2);
   }
   100% {
     opacity: 0;
-    transform: translate3d(var(--drift, 25px), -115vh, 0) rotate(35deg);
+    transform: translate3d(var(--drift, 20px), -110vh, 0);
   }
 }
 
 @keyframes toast-enter {
   from {
     opacity: 0;
-    transform: translate(-50%, -18px) scale(0.97);
+    transform: translate(-50%, -16px) scale(0.98);
   }
   to {
     opacity: 1;
@@ -579,7 +488,7 @@ h2 span {
   }
   to {
     opacity: 0;
-    transform: translate(-50%, -10px) scale(0.98);
+    transform: translate(-50%, -8px) scale(0.99);
   }
 }
 
@@ -590,7 +499,7 @@ h2 span {
 
 @keyframes note-appear {
   from {
-    opacity: 0.45;
+    opacity: 0.5;
     transform: translateY(3px);
   }
   to {
@@ -599,18 +508,7 @@ h2 span {
   }
 }
 
-@keyframes success-enter {
-  from {
-    opacity: 0;
-    transform: scale(0.8) rotate(-8deg);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) rotate(0);
-  }
-}
-
-/* Responsive layout */
+/* Mobile */
 
 @media (max-width: 480px) {
   .page-shell {
@@ -621,7 +519,7 @@ h2 span {
   .apology-card,
   .thank-you-screen {
     padding: 27px 20px 21px;
-    border-radius: 24px;
+    border-radius: 22px;
   }
 
   .top-label {
@@ -629,23 +527,20 @@ h2 span {
     letter-spacing: 1.5px;
   }
 
-  .main-heart {
-    width: 74px;
-    height: 74px;
+  .main-symbol {
+    width: 68px;
+    height: 68px;
     margin-top: 22px;
-  }
-
-  .main-heart > span {
-    font-size: 34px;
+    font-size: 30px;
   }
 
   h1 {
-    font-size: 52px;
+    font-size: 51px;
   }
 
   .apology-copy {
     font-size: 12.5px;
-    line-height: 1.9;
+    line-height: 1.85;
   }
 
   .apology-copy .highlight-line {
@@ -653,32 +548,18 @@ h2 span {
     font-size: 12px;
   }
 
-  .signature {
-    margin-top: 19px;
-    margin-bottom: 17px;
-  }
-
-  .button {
-    min-height: 49px;
-  }
-
-  .gentle-note {
-    margin-bottom: 16px;
-  }
-
   .apology-toast {
     top: max(12px, env(safe-area-inset-top));
     gap: 10px;
-    padding: 14px;
-    border-radius: 18px;
+    padding: 13px;
+    border-radius: 15px;
   }
 
   .toast-icon {
-    flex-basis: 40px;
-    width: 40px;
-    height: 40px;
-    border-radius: 13px;
-    font-size: 19px;
+    flex-basis: 38px;
+    width: 38px;
+    height: 38px;
+    font-size: 18px;
   }
 
   .toast-title {
@@ -687,11 +568,6 @@ h2 span {
 
   .toast-message {
     font-size: 11.5px;
-  }
-
-  .thank-you-screen {
-    padding-top: 37px;
-    padding-bottom: 33px;
   }
 }
 
@@ -703,7 +579,7 @@ h2 span {
   }
 
   h1 {
-    font-size: 46px;
+    font-size: 45px;
   }
 
   .top-label {
