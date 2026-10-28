@@ -1,16 +1,15 @@
 
 :root {
   color-scheme: light;
-  --background: #fff7f9;
-  --card: rgba(255, 255, 255, 0.82);
-  --pink: #e85d83;
-  --pink-dark: #c94169;
-  --pink-soft: #ffe3eb;
-  --text: #49323b;
-  --muted: #927b84;
-  --border: rgba(209, 130, 155, 0.19);
+  --background: #fff6f9;
+  --pink: #e65c83;
+  --pink-dark: #cb416b;
+  --pink-soft: #ffe5ed;
+  --text: #49313b;
+  --muted: #987e89;
+  --border: rgba(217, 131, 158, 0.2);
   --shadow: 0 24px 80px rgba(146, 76, 102, 0.12);
-  --radius: 30px;
+  --radius: 28px;
 }
 
 * {
@@ -24,9 +23,10 @@ html {
 }
 
 body {
-  margin: 0;
+  position: relative;
   min-height: 100vh;
   min-height: 100dvh;
+  margin: 0;
   overflow-x: hidden;
   background:
     radial-gradient(ellipse at 50% 0%, #fff 0%, transparent 54%),
@@ -41,13 +41,15 @@ button {
 }
 
 button:focus-visible {
-  outline: 3px solid rgba(232, 93, 131, 0.65);
+  outline: 3px solid rgba(230, 92, 131, 0.65);
   outline-offset: 4px;
 }
 
 [hidden] {
   display: none !important;
 }
+
+/* Background decoration */
 
 .ambient-glow {
   position: fixed;
@@ -56,21 +58,41 @@ button:focus-visible {
   height: 300px;
   border-radius: 50%;
   filter: blur(85px);
-  opacity: 0.38;
+  opacity: 0.36;
   pointer-events: none;
 }
 
 .glow-one {
   top: -140px;
   left: -100px;
-  background: #ffd4e2;
+  background: #ffd3e1;
 }
 
 .glow-two {
   right: -140px;
   bottom: -120px;
-  background: #f4d9ff;
+  background: #f0d8ff;
 }
+
+.heart-background {
+  position: fixed;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.floating-heart {
+  position: absolute;
+  bottom: -35px;
+  color: #e8a3b8;
+  opacity: 0;
+  user-select: none;
+  animation: float-up var(--duration, 12s) linear forwards;
+  will-change: transform, opacity;
+}
+
+/* Main layout */
 
 .page-shell {
   position: relative;
@@ -82,22 +104,24 @@ button:focus-visible {
   width: 100%;
   min-height: 100vh;
   min-height: 100dvh;
-  padding: 42px 18px 24px;
+  padding: 38px 18px 24px;
 }
 
 .apology-card,
 .thank-you-screen {
-  width: min(100%, 510px);
-  padding: 35px 40px 25px;
+  width: min(100%, 520px);
+  padding: 34px 38px 25px;
   overflow: hidden;
   text-align: center;
-  background: var(--card);
-  border: 1px solid rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.84);
+  border: 1px solid rgba(255, 255, 255, 0.96);
   border-radius: var(--radius);
-  box-shadow: var(--shadow), inset 0 0 0 1px var(--border);
+  box-shadow:
+    var(--shadow),
+    inset 0 0 0 1px var(--border);
   -webkit-backdrop-filter: blur(18px);
   backdrop-filter: blur(18px);
-  animation: card-enter 700ms cubic-bezier(.2, .8, .2, 1) both;
+  animation: card-enter 650ms cubic-bezier(.2, .8, .2, 1) both;
 }
 
 .top-label {
@@ -111,30 +135,31 @@ button:focus-visible {
   letter-spacing: 2px;
 }
 
-.label-heart {
+.top-label span {
   color: var(--pink);
   font-size: 19px;
   line-height: 1;
 }
 
+/* Heart illustration */
+
 .main-heart {
   position: relative;
   display: grid;
   place-items: center;
-  width: 84px;
-  height: 84px;
-  margin: 28px auto 18px;
-  border: 1px solid rgba(232, 93, 131, 0.15);
-  border-radius: 50%;
+  width: 82px;
+  height: 82px;
+  margin: 26px auto 18px;
   background: linear-gradient(145deg, #fff2f6, #ffe0e9);
-  box-shadow: 0 10px 30px rgba(232, 93, 131, 0.11);
+  border: 1px solid rgba(230, 92, 131, 0.15);
+  border-radius: 50%;
+  box-shadow: 0 10px 30px rgba(230, 92, 131, 0.1);
 }
 
-.main-heart span {
-  display: block;
+.main-heart > span {
   color: var(--pink);
-  font-size: 39px;
-  animation: heart-beat 2.2s ease-in-out infinite;
+  font-size: 38px;
+  animation: heart-beat 2.4s ease-in-out infinite;
 }
 
 .spark {
@@ -169,7 +194,7 @@ button:focus-visible {
   color: var(--muted);
   font-size: 12px;
   font-weight: 500;
-  letter-spacing: 0.6px;
+  letter-spacing: 0.4px;
 }
 
 h1,
@@ -179,7 +204,7 @@ h2 {
   font-size: clamp(45px, 10vw, 62px);
   font-weight: 600;
   letter-spacing: -2px;
-  line-height: 1.05;
+  line-height: 1.07;
 }
 
 h1 span,
@@ -193,11 +218,11 @@ h2 span {
   align-items: center;
   justify-content: center;
   gap: 12px;
-  margin: 23px auto 22px;
+  margin: 23px auto 21px;
 }
 
 .title-divider > span:not(.divider-heart) {
-  width: 46px;
+  width: 45px;
   height: 1px;
   background: #efd0da;
 }
@@ -207,11 +232,13 @@ h2 span {
   font-size: 11px;
 }
 
+/* Apology text */
+
 .apology-copy {
-  max-width: 385px;
+  max-width: 390px;
   margin: 0 auto;
   color: #725d66;
-  font-size: 13.5px;
+  font-size: 13px;
   line-height: 1.95;
 }
 
@@ -220,17 +247,17 @@ h2 span {
 }
 
 .apology-copy .highlight-line {
-  margin-top: 18px;
+  margin: 18px 0;
   padding: 13px 15px;
   color: #79505e;
-  background: rgba(255, 231, 238, 0.55);
-  border: 1px solid rgba(232, 93, 131, 0.1);
+  background: rgba(255, 231, 238, 0.65);
+  border: 1px solid rgba(230, 92, 131, 0.1);
   border-radius: 15px;
-  font-size: 13px;
+  font-size: 12.5px;
 }
 
 .signature {
-  margin: 23px 0 22px;
+  margin: 23px 0 20px;
 }
 
 .signature-line {
@@ -254,10 +281,12 @@ h2 span {
   color: var(--pink);
 }
 
+/* Buttons */
+
 .button-area {
   display: grid;
   gap: 11px;
-  margin-top: 25px;
+  margin-top: 24px;
 }
 
 .button {
@@ -266,7 +295,7 @@ h2 span {
   justify-content: center;
   gap: 10px;
   width: 100%;
-  min-height: 52px;
+  min-height: 51px;
   padding: 13px 18px;
   border: 1px solid transparent;
   border-radius: 15px;
@@ -285,13 +314,8 @@ h2 span {
   transform: scale(0.985);
 }
 
-.button:disabled {
-  cursor: default;
-  opacity: 0.7;
-}
-
 .button-primary {
-  color: #fff;
+  color: white;
   background: linear-gradient(135deg, #ee7a9b, #df5079);
   box-shadow: 0 8px 22px rgba(224, 80, 121, 0.23);
 }
@@ -304,7 +328,7 @@ h2 span {
 
 .button-secondary {
   color: #8e6e7a;
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.8);
   border-color: #f0dce3;
 }
 
@@ -319,15 +343,14 @@ h2 span {
 
 .gentle-note {
   min-height: 20px;
-  margin: 17px 0 20px;
+  margin: 16px 0 20px;
   color: #a28a94;
   font-size: 11px;
   line-height: 1.7;
-  transition: opacity 200ms ease;
 }
 
 .gentle-note.note-updated {
-  animation: note-appear 350ms ease both;
+  animation: note-appear 300ms ease both;
 }
 
 .card-footer {
@@ -339,101 +362,154 @@ h2 span {
   border-top: 1px solid rgba(209, 130, 155, 0.15);
   color: #b09aa3;
   font-size: 10px;
-  letter-spacing: 0.15px;
 }
 
 .footer-heart {
   color: #e98ca8;
-  font-size: 11px;
 }
 
 .page-caption {
-  margin: 21px 0 0;
+  margin: 20px 0 0;
   color: #b09aa3;
   font-size: 10px;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
   text-align: center;
 }
 
-.heart-background {
-  position: fixed;
-  z-index: 0;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.floating-heart {
-  position: absolute;
-  bottom: -35px;
-  color: #e8a3b8;
-  opacity: 0;
-  animation: float-up var(--duration, 12s) linear forwards;
-  user-select: none;
-  will-change: transform, opacity;
-}
+/* Premium popup */
 
 .message-layer {
   position: fixed;
-  z-index: 5;
+  z-index: 100;
   inset: 0;
   overflow: hidden;
   pointer-events: none;
 }
 
-.apology-pop {
+.apology-toast {
   position: absolute;
+  top: max(20px, env(safe-area-inset-top));
   left: 50%;
-  bottom: 13%;
-  width: max-content;
-  max-width: min(86vw, 330px);
-  padding: 12px 17px;
-  color: #754756;
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid #f5d5df;
-  border-radius: 16px;
-  box-shadow: 0 12px 35px rgba(135, 70, 95, 0.12);
-  font-size: 12px;
-  line-height: 1.7;
-  text-align: center;
-  transform: translate(-50%, 12px);
-  animation: pop-message 3.4s ease forwards;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  width: min(430px, calc(100vw - 28px));
+  padding: 16px 17px;
+  overflow: hidden;
+  color: #65414f;
+  background:
+    radial-gradient(circle at top right, rgba(255, 222, 235, 0.7), transparent 55%),
+    rgba(255, 252, 253, 0.96);
+  border: 1px solid rgba(232, 145, 170, 0.4);
+  border-radius: 21px;
+  box-shadow:
+    0 18px 55px rgba(145, 69, 96, 0.17),
+    0 3px 12px rgba(145, 69, 96, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  -webkit-backdrop-filter: blur(22px);
+  backdrop-filter: blur(22px);
+  opacity: 0;
+  transform: translate(-50%, -18px) scale(0.97);
+  animation: toast-enter 420ms cubic-bezier(.2, .8, .2, 1) forwards;
 }
 
+.apology-toast::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #f6c5d4, #e85d83, #f6c5d4);
+  transform-origin: left;
+  animation: toast-progress 5.5s linear forwards;
+}
+
+.toast-icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: 0 0 46px;
+  width: 46px;
+  height: 46px;
+  color: #e65c83;
+  background: linear-gradient(145deg, #fff0f5, #ffdfeb);
+  border: 1px solid rgba(232, 93, 131, 0.13);
+  border-radius: 16px;
+  font-size: 22px;
+}
+
+.toast-icon::after {
+  content: "✦";
+  position: absolute;
+  top: -5px;
+  right: -4px;
+  color: #e99bb4;
+  font-size: 12px;
+}
+
+.toast-content {
+  flex: 1;
+  min-width: 0;
+  padding: 2px 0;
+}
+
+.toast-title {
+  margin: 0 0 5px;
+  color: #b64d70;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.toast-message {
+  margin: 0;
+  color: #806773;
+  font-size: 12px;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+}
+
+.apology-toast.is-leaving {
+  animation: toast-exit 300ms ease forwards;
+}
+
+/* Thank-you screen */
+
 .thank-you-screen {
-  padding-top: 48px;
-  padding-bottom: 42px;
+  padding-top: 45px;
+  padding-bottom: 40px;
 }
 
 .success-heart {
   display: grid;
   place-items: center;
-  width: 96px;
-  height: 96px;
+  width: 94px;
+  height: 94px;
   margin: 0 auto 24px;
   border-radius: 50%;
   background: linear-gradient(145deg, #fff0f5, #ffdeea);
   box-shadow: 0 10px 35px rgba(232, 93, 131, 0.12);
   font-size: 42px;
-  animation: success-enter 700ms cubic-bezier(.2, .8, .2, 1) both;
+  animation: success-enter 650ms cubic-bezier(.2, .8, .2, 1) both;
 }
 
 .thank-you-screen h2 {
-  font-size: clamp(34px, 8vw, 47px);
+  font-size: clamp(36px, 8vw, 48px);
   letter-spacing: -1.4px;
   line-height: 1.2;
 }
 
 .success-message {
-  max-width: 350px;
+  max-width: 360px;
   margin: 0 auto;
   color: #725d66;
-  font-size: 14px;
+  font-size: 13.5px;
   line-height: 2;
 }
 
 .success-signature {
-  margin: 27px 0 0;
+  margin: 26px 0 0;
   color: #9c7b87;
   font-family: "Playfair Display", Georgia, serif;
   font-size: 16px;
@@ -441,11 +517,13 @@ h2 span {
 }
 
 .success-decoration {
-  margin-top: 30px;
+  margin-top: 28px;
   color: #e88eaa;
   font-size: 15px;
   letter-spacing: 6px;
 }
+
+/* Animations */
 
 @keyframes card-enter {
   from {
@@ -462,7 +540,7 @@ h2 span {
   0%, 100% { transform: scale(1); }
   14% { transform: scale(1.1); }
   28% { transform: scale(1); }
-  42% { transform: scale(1.07); }
+  42% { transform: scale(1.06); }
   56% { transform: scale(1); }
 }
 
@@ -471,32 +549,54 @@ h2 span {
     opacity: 0;
     transform: translate3d(0, 0, 0) rotate(0deg);
   }
-  10% { opacity: var(--heart-opacity, 0.35); }
-  85% { opacity: var(--heart-opacity, 0.35); }
+  10% {
+    opacity: var(--heart-opacity, 0.3);
+  }
+  85% {
+    opacity: var(--heart-opacity, 0.3);
+  }
   100% {
     opacity: 0;
-    transform: translate3d(var(--drift, 30px), -115vh, 0) rotate(35deg);
+    transform: translate3d(var(--drift, 25px), -115vh, 0) rotate(35deg);
   }
 }
 
-@keyframes pop-message {
-  0% {
+@keyframes toast-enter {
+  from {
     opacity: 0;
-    transform: translate(-50%, 12px) scale(0.96);
+    transform: translate(-50%, -18px) scale(0.97);
   }
-  12%, 76% {
+  to {
     opacity: 1;
     transform: translate(-50%, 0) scale(1);
   }
-  100% {
+}
+
+@keyframes toast-exit {
+  from {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+  to {
     opacity: 0;
     transform: translate(-50%, -10px) scale(0.98);
   }
 }
 
+@keyframes toast-progress {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
+
 @keyframes note-appear {
-  from { opacity: 0.45; transform: translateY(3px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0.45;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes success-enter {
@@ -510,15 +610,17 @@ h2 span {
   }
 }
 
+/* Responsive layout */
+
 @media (max-width: 480px) {
   .page-shell {
     justify-content: flex-start;
-    padding: 22px 13px 17px;
+    padding: 20px 12px 17px;
   }
 
   .apology-card,
   .thank-you-screen {
-    padding: 28px 21px 21px;
+    padding: 27px 20px 21px;
     border-radius: 24px;
   }
 
@@ -528,22 +630,22 @@ h2 span {
   }
 
   .main-heart {
-    width: 75px;
-    height: 75px;
-    margin-top: 23px;
+    width: 74px;
+    height: 74px;
+    margin-top: 22px;
   }
 
-  .main-heart span {
-    font-size: 35px;
+  .main-heart > span {
+    font-size: 34px;
   }
 
   h1 {
-    font-size: 53px;
+    font-size: 52px;
   }
 
   .apology-copy {
-    font-size: 13px;
-    line-height: 1.85;
+    font-size: 12.5px;
+    line-height: 1.9;
   }
 
   .apology-copy .highlight-line {
@@ -552,29 +654,52 @@ h2 span {
   }
 
   .signature {
-    margin-top: 20px;
-    margin-bottom: 18px;
-  }
-
-  .button {
-    min-height: 50px;
-  }
-
-  .gentle-note {
+    margin-top: 19px;
     margin-bottom: 17px;
   }
 
+  .button {
+    min-height: 49px;
+  }
+
+  .gentle-note {
+    margin-bottom: 16px;
+  }
+
+  .apology-toast {
+    top: max(12px, env(safe-area-inset-top));
+    gap: 10px;
+    padding: 14px;
+    border-radius: 18px;
+  }
+
+  .toast-icon {
+    flex-basis: 40px;
+    width: 40px;
+    height: 40px;
+    border-radius: 13px;
+    font-size: 19px;
+  }
+
+  .toast-title {
+    font-size: 14px;
+  }
+
+  .toast-message {
+    font-size: 11.5px;
+  }
+
   .thank-you-screen {
-    padding-top: 38px;
-    padding-bottom: 35px;
+    padding-top: 37px;
+    padding-bottom: 33px;
   }
 }
 
 @media (max-width: 350px) {
   .apology-card,
   .thank-you-screen {
-    padding-right: 16px;
-    padding-left: 16px;
+    padding-right: 15px;
+    padding-left: 15px;
   }
 
   h1 {
@@ -599,5 +724,4 @@ h2 span {
   .heart-background {
     display: none;
   }
-    }
-    
+}
