@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     !heartBackground ||
     !messageLayer
   ) {
-    console.error("Apology page: required HTML elements are missing.");
+    console.error("Apology page setup error: check the HTML element IDs.");
     return;
   }
 
@@ -30,45 +30,88 @@ document.addEventListener("DOMContentLoaded", () => {
   let accepted = false;
   let heartTimer = null;
   let popupTimer = null;
-  let popupRemovalTimer = null;
+  let removalTimer = null;
   let activePopup = null;
-  let lastMessageIndex = -1;
+  let previousMessageIndex = -1;
 
-  // These are gentle variations, not escalating messages.
+  // Natural Hinglish apology messages.
+  // No click counter and no escalating or guilt-based messages.
   const apologyMessages = [
     {
-      icon: "♡",
-      title: "Ek baat dil se... 💗",
+      icon: "🥺",
+      title: "Ek baat kehni thi...",
       message:
-        "Mujhe apni galti ka ehsaas hai. Kaash maine tumhe hurt na kiya hota. I'm genuinely sorry."
+        "Mujhe sach mein afsos hai ki meri wajah se tumhe bura laga."
     },
     {
-      icon: "💌",
-      title: "I really mean it.",
+      icon: "💬",
+      title: "I mean it.",
       message:
-        "Yeh sirf sorry kehne ke liye nahi hai. Main samajhna aur apni galti se seekhna chahta hoon."
-    },
-    {
-      icon: "🌷",
-      title: "Tumhari feelings matter karti hain.",
-      message:
-        "Main tumhari feelings ko samajhne ki koshish karunga. Tumhe jo waqt chahiye, woh le sakti ho."
+        "Main bas formalities ke liye sorry nahi keh raha. Mujhe apni galti ka ehsaas hai."
     },
     {
       icon: "🤍",
-      title: "Koi jaldi nahi hai.",
+      title: "I'm sorry.",
       message:
-        "Tumhe abhi kuch kehne ya decide karne ki zaroorat nahi. Bas chahta tha ki meri maafi tum tak pahunch jaaye."
+        "Mera irada tumhe hurt karna nahi tha, lekin main samajhta hoon ki tumhe bura laga."
+    },
+    {
+      icon: "🌿",
+      title: "Koi pressure nahi.",
+      message:
+        "Tumhe abhi maaf karna zaroori nahi hai. Main tumhari feelings samajhta hoon."
+    },
+    {
+      icon: "😔",
+      title: "Mujhse galti hui.",
+      message:
+        "Main apni galti ko justify nahi karna chahta. Jo hua, uske liye I'm sorry."
     },
     {
       icon: "🫶",
-      title: "Dil se sorry.",
+      title: "Bas itna kehna tha...",
       message:
-        "Main jo hua use badal nahi sakta, lekin usse seekh kar aage behtar karne ki koshish zaroor kar sakta hoon."
+        "Tumhara hurt hona valid hai. Main tumhari baat ko lightly nahi lena chahta."
+    },
+    {
+      icon: "💭",
+      title: "I understand.",
+      message:
+        "Ho sakta hai meri baat ka asar mujhe us waqt samajh nahi aaya. Uske liye mujhe afsos hai."
+    },
+    {
+      icon: "🕊️",
+      title: "Take your time.",
+      message:
+        "Aaram se sochna. Tumhe abhi koi jawab dene ki zaroorat nahi hai."
+    },
+    {
+      icon: "🌷",
+      title: "Dil se maafi.",
+      message:
+        "Kaash woh baat us tarah na hui hoti. Main genuinely sorry hoon."
+    },
+    {
+      icon: "💌",
+      title: "Ek honest apology.",
+      message:
+        "Main nahi chahta ki meri safai dene mein tumhari feelings peeche reh jaayein."
+    },
+    {
+      icon: "🤝",
+      title: "I respect how you feel.",
+      message:
+        "Tum jo feel kar rahe ho, uske liye main tumhe blame nahi karunga. I'm sorry."
+    },
+    {
+      icon: "🙂",
+      title: "Bas meri baat itni si hai.",
+      message:
+        "Mujhe apni galti ka afsos hai. Main bas chahta tha ki tumhe meri sincere maafi pata chale."
     }
   ];
 
-  // ---------- Floating hearts ----------
+  // ---------- Floating background decoration ----------
 
   function createHeart() {
     if (
@@ -83,20 +126,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const heart = document.createElement("span");
     heart.className = "floating-heart";
     heart.setAttribute("aria-hidden", "true");
-    heart.textContent = Math.random() > 0.5 ? "♡" : "♥";
+    heart.textContent = Math.random() > 0.5 ? "♡" : "·";
 
-    const duration = 9 + Math.random() * 6;
+    const duration = 10 + Math.random() * 5;
 
     heart.style.left = `${Math.random() * 100}%`;
-    heart.style.fontSize = `${11 + Math.random() * 15}px`;
+    heart.style.fontSize = `${12 + Math.random() * 12}px`;
     heart.style.setProperty("--duration", `${duration}s`);
     heart.style.setProperty(
       "--drift",
-      `${Math.round(Math.random() * 80 - 40)}px`
+      `${Math.round(Math.random() * 70 - 35)}px`
     );
     heart.style.setProperty(
       "--heart-opacity",
-      `${0.15 + Math.random() * 0.2}`
+      `${0.12 + Math.random() * 0.14}`
     );
 
     heartBackground.appendChild(heart);
@@ -115,7 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     createHeart();
-    heartTimer = window.setInterval(createHeart, 1000);
+    heartTimer = window.setInterval(createHeart, 1200);
   }
 
   function stopHearts() {
@@ -127,19 +170,17 @@ document.addEventListener("DOMContentLoaded", () => {
     heartBackground.replaceChildren();
   }
 
-  // ---------- Gentle note below the buttons ----------
+  // ---------- Small note under the buttons ----------
 
   function updateGentleNote(message) {
     gentleNote.classList.remove("note-updated");
-
-    // Restart the visual transition; no click count is maintained.
     void gentleNote.offsetWidth;
 
     gentleNote.textContent = message;
     gentleNote.classList.add("note-updated");
   }
 
-  // ---------- Popup helpers ----------
+  // ---------- Popup management ----------
 
   function clearPopupTimers() {
     if (popupTimer !== null) {
@@ -147,9 +188,9 @@ document.addEventListener("DOMContentLoaded", () => {
       popupTimer = null;
     }
 
-    if (popupRemovalTimer !== null) {
-      window.clearTimeout(popupRemovalTimer);
-      popupRemovalTimer = null;
+    if (removalTimer !== null) {
+      window.clearTimeout(removalTimer);
+      removalTimer = null;
     }
   }
 
@@ -182,38 +223,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
     popup.classList.add("is-leaving");
 
-    popupRemovalTimer = window.setTimeout(() => {
+    removalTimer = window.setTimeout(() => {
       popup.remove();
-      popupRemovalTimer = null;
-    }, 320);
+      removalTimer = null;
+    }, 280);
   }
 
-  function getApologyMessage() {
+  function chooseMessage() {
     if (apologyMessages.length === 1) {
       return apologyMessages[0];
     }
 
-    let nextIndex = Math.floor(
-      Math.random() * apologyMessages.length
-    );
+    let index = Math.floor(Math.random() * apologyMessages.length);
 
-    // Avoid immediately repeating the same message.
-    if (nextIndex === lastMessageIndex) {
-      nextIndex = (nextIndex + 1) % apologyMessages.length;
+    // Prevent the same message from appearing twice in a row.
+    if (index === previousMessageIndex) {
+      index = (index + 1) % apologyMessages.length;
     }
 
-    lastMessageIndex = nextIndex;
-    return apologyMessages[nextIndex];
+    previousMessageIndex = index;
+    return apologyMessages[index];
   }
 
   function showApologyPopup() {
     if (accepted || document.hidden) return;
 
-    // Replace any existing popup instead of stacking notifications.
+    // Never stack popups on top of one another.
     removePopupImmediately();
 
-    const selectedMessage = getApologyMessage();
-
+    const item = chooseMessage();
     const popup = document.createElement("div");
     popup.className = "apology-toast";
     popup.setAttribute("role", "status");
@@ -221,18 +259,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const icon = document.createElement("div");
     icon.className = "toast-icon";
     icon.setAttribute("aria-hidden", "true");
-    icon.textContent = selectedMessage.icon;
+    icon.textContent = item.icon;
 
     const content = document.createElement("div");
     content.className = "toast-content";
 
     const title = document.createElement("p");
     title.className = "toast-title";
-    title.textContent = selectedMessage.title;
+    title.textContent = item.title;
 
     const message = document.createElement("p");
     message.className = "toast-message";
-    message.textContent = selectedMessage.message;
+    message.textContent = item.message;
 
     content.append(title, message);
     popup.append(icon, content);
@@ -240,20 +278,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     activePopup = popup;
 
-    // Give enough time to read, then dismiss gently.
+    // Let the person read the message before it disappears.
     popupTimer = window.setTimeout(() => {
       popupTimer = null;
       dismissPopup();
-    }, 5500);
+    }, 6000);
   }
 
-  // ---------- Button actions ----------
+  // ---------- Button behavior ----------
 
   notYetButton.addEventListener("click", () => {
     if (accepted) return;
 
     updateGentleNote(
-      "Koi baat nahi. Apna waqt lo, main tumhari feelings ki respect karta hoon. ♡"
+      "Theek hai, apna waqt lo. Main tumhari feelings ki respect karta hoon."
     );
 
     showApologyPopup();
@@ -270,17 +308,17 @@ document.addEventListener("DOMContentLoaded", () => {
     apologyCard.hidden = true;
     thankYouScreen.hidden = false;
 
+    thankYouScreen.focus({ preventScroll: true });
+
     if (!reducedMotion.matches) {
       thankYouScreen.scrollIntoView({
         behavior: "smooth",
         block: "center"
       });
     }
-
-    thankYouScreen.focus({ preventScroll: true });
   });
 
-  // ---------- Visibility and accessibility ----------
+  // ---------- Visibility and motion preferences ----------
 
   function handleVisibilityChange() {
     if (document.hidden) {
@@ -305,10 +343,7 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
   if (typeof reducedMotion.addEventListener === "function") {
-    reducedMotion.addEventListener(
-      "change",
-      handleMotionPreference
-    );
+    reducedMotion.addEventListener("change", handleMotionPreference);
   } else if (typeof reducedMotion.addListener === "function") {
     reducedMotion.addListener(handleMotionPreference);
   }
@@ -318,6 +353,5 @@ document.addEventListener("DOMContentLoaded", () => {
     removePopupImmediately();
   });
 
-  // Start the decorative background.
   startHearts();
 });
